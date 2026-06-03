@@ -6,14 +6,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// اتصال قاعدة البيانات
+// 🟢 اتصال قاعدة البيانات (Railway)
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "roundhouse.proxy.rlwy.net",
   user: "root",
-  password: "Asd0954200716Asd@",
-  database: "medical_point"
+  password: "FbLSDScbwhwEocaKuPkVVVCEPHACONT",
+  database: "railway",
+  port: 38921
 });
 
+// 🔌 فحص الاتصال
 db.connect(err => {
   if (err) {
     console.log("Database error:", err);
@@ -21,7 +23,6 @@ db.connect(err => {
     console.log("Connected to DB");
   }
 });
-
 
 // 📋 جلب المرضى
 app.get("/patients", (req, res) => {
@@ -31,7 +32,6 @@ app.get("/patients", (req, res) => {
   });
 });
 
-
 // ➕ إضافة مريض
 app.post("/add-patient", (req, res) => {
   const { name, age } = req.body;
@@ -39,24 +39,22 @@ app.post("/add-patient", (req, res) => {
   db.query(
     "INSERT INTO patients (name, age) VALUES (?, ?)",
     [name, age],
-    (err, result) => {
+    (err) => {
       if (err) return res.json(err);
       res.json("تم الحفظ");
     }
   );
 });
 
-
 // ❌ حذف مريض
 app.delete("/delete-patient/:id", (req, res) => {
   const id = req.params.id;
 
-  db.query("DELETE FROM patients WHERE id = ?", [id], (err, result) => {
+  db.query("DELETE FROM patients WHERE id = ?", [id], (err) => {
     if (err) return res.json(err);
     res.json("تم الحذف");
   });
 });
-
 
 // ✏️ تعديل مريض
 app.put("/update-patient/:id", (req, res) => {
@@ -66,17 +64,16 @@ app.put("/update-patient/:id", (req, res) => {
   db.query(
     "UPDATE patients SET name=?, age=? WHERE id=?",
     [name, age, id],
-    (err, result) => {
+    (err) => {
       if (err) return res.json(err);
       res.json("تم التعديل");
     }
   );
 });
 
-
-// تشغيل السيرفر
+// 🚀 تشغيل السيرفر
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running");
+  console.log("Server running on port " + PORT);
 });
