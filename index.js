@@ -10,7 +10,7 @@ app.use(express.json());
 const db = mysql.createPool({
   host: "roundhouse.proxy.rlwy.net",
   user: "root",
-  password: "FbLSDScbwhWEocaKuPkVVVCEPHACONT",
+  password: "FbLsDScbWhWEocaKuPkvvVcErHACqNTJ",
   database: "railway",
   port: 38921,
   waitForConnections: true,
