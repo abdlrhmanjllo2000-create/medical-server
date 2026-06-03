@@ -6,21 +6,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🟢 اتصال قاعدة البيانات (Railway)
-const db = mysql.createConnection({
+// 🟢 اتصال قاعدة البيانات (Railway - Production)
+const db = mysql.createPool({
   host: "roundhouse.proxy.rlwy.net",
   user: "root",
-  password: "FbLSDScbwhwEocaKuPkVVVCEPHACONT",
+  password: "FbLSDScbwhWEocaKuPkVVVCEPHACONT",
   database: "railway",
-  port: 38921
+  port: 38921,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-// 🔌 فحص الاتصال
-db.connect(err => {
+// 🔌 اختبار الاتصال
+db.getConnection((err, connection) => {
   if (err) {
     console.log("Database error:", err);
   } else {
     console.log("Connected to DB");
+    connection.release();
   }
 });
 
